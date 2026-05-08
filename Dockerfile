@@ -73,6 +73,9 @@ php artisan config:cache\n\
 # Run migrations\n\
 php artisan migrate --force\n\
 \n\
+# Seed database with admin user\n\
+php artisan db:seed --class=UserSeeder --force\n\
+\n\
 # Start Apache\n\
 apache2-foreground' > /usr/local/bin/start.sh
 
