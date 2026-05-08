@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример встраивания трекера посещений</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .info-box {
+            background: #f0f8ff;
+            border-left: 4px solid #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Демонстрация трекера посещений</h1>
+
+    <div class="info-box">
+        <h2>Информация о странице</h2>
+        <p><strong>Эта страница использует трекер посещений.</strong></p>
+        <p>При загрузке страницы автоматически:</p>
+        <ul>
+            <li>Определяется тип устройства (Desktop/Mobile)</li>
+            <li>Получается город по IP-адресу</li>
+            <li>Данные отправляются на сервер</li>
+        </ul>
+    </div>
+
+    <h2>Как встроить трекер на свой сайт</h2>
+
+    <p>Добавьте следующий код перед закрывающим тегом <code>&lt;/body&gt;</code>:</p>
+
+    <pre><code>&lt;script
+    src="http://localhost:8000/tracker.js"
+    data-api-url="http://localhost:8000/api/track"
+&gt;&lt;/script&gt;</code></pre>
+
+    <h2>Параметры</h2>
+    <ul>
+        <li><code>src</code> — URL файла трекера</li>
+        <li><code>data-api-url</code> — URL API endpoint для приема данных</li>
+    </ul>
+
+    <div class="status">
+        <h3>Статус трекера</h3>
+        <p id="tracker-status">⏳ Инициализация...</p>
+    </div>
+
+    <h2>Просмотр статистики</h2>
+    <p>Для просмотра собранной статистики:</p>
+    <ol>
+        <li>Перейдите на <a href="http://localhost:8000/login">страницу входа</a></li>
+        <li>Войдите с учетными данными:
+            <ul>
+                <li>Email: <code>admin@example.com</code></li>
+                <li>Пароль: <code>password</code></li>
+            </ul>
+        </li>
+        <li>Вы будете перенаправлены на <a href="http://localhost:8000/dashboard">Dashboard</a></li>
+    </ol>
+
+    <!-- Встраиваем трекер -->
+    <script
+        src="http://localhost:8000/tracker.js"
+        data-api-url="http://localhost:8000/api/track"
+    ></script>
+
+    <script>
+        // Обновляем статус после загрузки
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('tracker-status').innerHTML = '✅ Трекер активен. Данные отправлены на сервер.';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

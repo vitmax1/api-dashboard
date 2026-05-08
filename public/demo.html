@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Field Visibility Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Демонстрация динамической видимости полей</h1>
+
+    <form>
+        <div class="form-group">
+            <label for="type">Тип:</label>
+            <select name="type" id="type">
+                <option value="">-- Выберите тип --</option>
+                <option value="personal">Личные данные</option>
+                <option value="company">Компания</option>
+                <option value="delivery">Доставка</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Поля формы:</label>
+
+            <input type="text" name="personal_name" placeholder="Имя (personal_name)">
+            <input type="email" name="personal_email" placeholder="Email (personal_email)">
+            <input type="tel" name="personal_phone" placeholder="Телефон (personal_phone)">
+
+            <input type="text" name="company_name" placeholder="Название компании (company_name)">
+            <input type="text" name="company_inn" placeholder="ИНН (company_inn)">
+            <input type="text" name="company_address" placeholder="Адрес компании (company_address)">
+
+            <input type="text" name="delivery_address" placeholder="Адрес доставки (delivery_address)">
+            <input type="text" name="delivery_city" placeholder="Город (delivery_city)">
+            <input type="text" name="delivery_zip" placeholder="Индекс (delivery_zip)">
+        </div>
+    </form>
+
+    <script src="js/field-visibility.js"></script>
+</body>
+</html>
