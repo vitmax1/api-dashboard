@@ -18,5 +18,7 @@ yarn-error.log
 !/storage/framework/sessions/.gitkeep
 /storage/framework/views/*
 !/storage/framework/views/.gitkeep
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
 database/database.sqlite
 composer.phar
