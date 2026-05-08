@@ -76,6 +76,9 @@ php artisan migrate --force\n\
 # Seed database with admin user\n\
 php artisan db:seed --class=UserSeeder --force\n\
 \n\
+# Seed database with test visits\n\
+php artisan db:seed --class=VisitSeeder --force\n\
+\n\
 # Start Apache\n\
 apache2-foreground' > /usr/local/bin/start.sh
 
