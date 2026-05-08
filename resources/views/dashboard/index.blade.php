@@ -85,6 +85,31 @@
             color: #666;
         }
 
+        .error-message {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .charts-grid {
                 grid-template-columns: 1fr;
@@ -102,26 +127,35 @@
             </form>
         </header>
 
-        <div class="charts-grid">
-            <div class="chart-card">
-                <h2>Уникальные посещения по часам (последние 24 часа)</h2>
-                <div class="chart-container">
-                    <canvas id="hourlyChart"></canvas>
-                </div>
-            </div>
+        <div class="error-message" id="errorMessage"></div>
 
-            <div class="chart-card">
-                <h2>Распределение по городам</h2>
-                <div class="chart-container">
-                    <canvas id="cityChart"></canvas>
-                </div>
-            </div>
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner"></div>
+            <p>Загрузка статистики...</p>
         </div>
 
-        <div class="chart-card">
-            <h2>Распределение по устройствам</h2>
-            <div class="chart-container" style="height: 200px;">
-                <canvas id="deviceChart"></canvas>
+        <div id="chartsContainer" style="display: none;">
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h2>Уникальные посещения по часам (последние 24 часа)</h2>
+                    <div class="chart-container">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h2>Распределение по городам</h2>
+                    <div class="chart-container">
+                        <canvas id="cityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h2>Распределение по устройствам</h2>
+                <div class="chart-container" style="height: 200px;">
+                    <canvas id="deviceChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -133,24 +167,42 @@
 
         // Загружаем данные статистики
         async function loadStats() {
+            const errorMessage = document.getElementById('errorMessage');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const chartsContainer = document.getElementById('chartsContainer');
+
             try {
+                loadingIndicator.style.display = 'block';
+                errorMessage.style.display = 'none';
+
                 const response = await fetch('/api/dashboard/stats', {
                     headers: {
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': csrfToken,
                     },
+                    timeout: 30000, // 30 секунд таймаут
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to load stats');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
+
+                loadingIndicator.style.display = 'none';
+                chartsContainer.style.display = 'block';
+
                 renderCharts(data);
 
             } catch (error) {
                 console.error('Error loading stats:', error);
-                alert('Ошибка загрузки статистики');
+
+                loadingIndicator.style.display = 'none';
+                errorMessage.textContent = '⚠️ Ошибка загрузки статистики. Сервис может быть в режиме ожидания, попробуйте обновить страницу через 30 секунд.';
+                errorMessage.style.display = 'block';
+
+                // Автоматическая повторная попытка через 30 секунд
+                setTimeout(loadStats, 30000);
             }
         }
 
