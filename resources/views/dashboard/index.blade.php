@@ -165,6 +165,13 @@
         // Получаем CSRF токен
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+        // Хранилище для графиков
+        let charts = {
+            hourly: null,
+            city: null,
+            device: null
+        };
+
         // Загружаем данные статистики
         async function loadStats() {
             const errorMessage = document.getElementById('errorMessage');
@@ -208,6 +215,11 @@
 
         // Рендерим графики
         function renderCharts(data) {
+            // Уничтожаем старые графики перед созданием новых
+            if (charts.hourly) charts.hourly.destroy();
+            if (charts.city) charts.city.destroy();
+            if (charts.device) charts.device.destroy();
+
             // График по часам (Line Chart)
             const hourlyLabels = data.hourly.map(item => {
                 const date = new Date(item.hour);
@@ -215,7 +227,7 @@
             });
             const hourlyData = data.hourly.map(item => item.unique_visits);
 
-            new Chart(document.getElementById('hourlyChart'), {
+            charts.hourly = new Chart(document.getElementById('hourlyChart'), {
                 type: 'line',
                 data: {
                     labels: hourlyLabels,
@@ -251,7 +263,7 @@
             const cityLabels = data.cities.map(item => item.city || 'Неизвестно');
             const cityData = data.cities.map(item => item.count);
 
-            new Chart(document.getElementById('cityChart'), {
+            charts.city = new Chart(document.getElementById('cityChart'), {
                 type: 'pie',
                 data: {
                     labels: cityLabels,
@@ -286,7 +298,7 @@
             const deviceLabels = data.devices.map(item => item.device);
             const deviceData = data.devices.map(item => item.count);
 
-            new Chart(document.getElementById('deviceChart'), {
+            charts.device = new Chart(document.getElementById('deviceChart'), {
                 type: 'doughnut',
                 data: {
                     labels: deviceLabels,
